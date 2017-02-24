@@ -2,6 +2,12 @@ require 'data_mapper'
 require './dataParser/model/vote.rb'
 
 ENV['RACK_ENV'] ||= 'development'
+
+
+DataMapper.setup(:default, ENV['DATABASE_URL'] || "postgres://postgres@localhost/votesDashBoard_#{ENV['RACK_ENV']}")
+DataMapper.finalize
+DataMapper.auto_upgrade!
+
 class Parse
   attr_reader :data, :data_file_path, :non_well_formatted
 # use ARGV later to load the file instead of constructor!!
@@ -16,17 +22,26 @@ class Parse
     # parse_data @data
   end
 
-
-
-
   def parse_data data
     data.each do |rows|
-      rows.each do row
-        vote = Vote.new(type: row[0], epoch: row[1], campaign: row[2], validity: row[3], choice: row[4], conn: row[5], msisdn: row[6],  guid: row[7], shortcode: row[8])
-
-      end
+      vote = Vote.create(type: split_at_colon(rows[0]),
+        epoch: split_at_colon(rows[1]),
+        campaign: split_at_colon(rows[2]),
+        validity: split_at_colon(rows[3]),
+        choice: split_at_colon(rows[4]),
+        conn: split_at_colon(rows[5]),
+        msisdn: split_at_colon(rows[6]),
+        guid: split_at_colon(rows[7]),
+        shortcode: split_at_colon(rows[8]))
     end
 
+  end
+
+  def split_at_colon data
+    if data.include?(':')
+      data = data.split(':')[1]
+    end
+    data
   end
 
   private
@@ -67,8 +82,3 @@ class Parse
   end
 
 end
-
-
-DataMapper.setup(:default, ENV['DATABASE_URL'] || "postgres://postgres@localhost/votesDashBoard_#{ENV['RACK_ENV']}")
-DataMapper.finalize
-DataMapper.auto_upgrade!
