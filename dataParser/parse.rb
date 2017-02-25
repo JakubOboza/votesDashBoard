@@ -1,4 +1,5 @@
 require 'data_mapper'
+require 'dm-postgres-adapter'
 require './dataParser/model/vote.rb'
 
 ENV['RACK_ENV'] ||= 'development'
@@ -8,11 +9,13 @@ DataMapper.setup(:default, ENV['DATABASE_URL'] || "postgres://postgres@localhost
 DataMapper.finalize
 DataMapper.auto_upgrade!
 
+
 class Parse
   attr_reader :data, :data_file_path, :non_well_formatted
 # use ARGV later to load the file instead of constructor!!
   def initialize data_file_path
     @data_file_path = data_file_path
+    print @data_file_path
     @data = []
     @non_well_formatted = []
   end
@@ -34,7 +37,7 @@ class Parse
         msisdn: split_at_colon(rows[6]),
         guid: split_at_colon(rows[7]),
         shortcode: split_at_colon(rows[8]))
-        if index % (total/20) == 0
+        if index % (total/20.0) == 0
           print '. '
         end
     end
@@ -83,3 +86,8 @@ class Parse
   end
 
 end
+if !ARGV.empty?
+path = ARGV[0].strip
+end
+parse = Parse.new(path='./dataParser/test.txt')
+parse.prepare
