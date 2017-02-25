@@ -21,7 +21,6 @@ describe Parse do
   end
 
   it 'can open a file' do
-    @parse.prepare
     expect { @parse.prepare }.not_to raise_error
   end
 
@@ -49,7 +48,8 @@ describe Parse do
   end
 
   it 'can store data in database' do
-    @parse.prepare
+    parse = Parse.new()
+    parse.prepare
     row = @parse.data[0]
     @parse.parse_data([row])
     expect(Vote.count).to eq 1

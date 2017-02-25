@@ -19,11 +19,12 @@ class Parse
 
   def prepare
     file_to_array @data_file_path
-    # parse_data @data
+    parse_data @data
   end
 
   def parse_data data
-    data.each do |rows|
+    total = data.count
+    data.each.with_index do |rows, index|
       vote = Vote.create(type: split_at_colon(rows[0]),
         epoch: split_at_colon(rows[1]),
         campaign: split_at_colon(rows[2]),
@@ -33,15 +34,15 @@ class Parse
         msisdn: split_at_colon(rows[6]),
         guid: split_at_colon(rows[7]),
         shortcode: split_at_colon(rows[8]))
+        if index % (total/20) == 0
+          print '. '
+        end
     end
-
+    print " #{total} records parsed and #{@non_well_formatted.count} discarded"
   end
 
   def split_at_colon data
-    if data.include?(':')
-      data = data.split(':')[1]
-    end
-    data
+    data.include?(':') ? data.split(':')[1] : data
   end
 
   private
