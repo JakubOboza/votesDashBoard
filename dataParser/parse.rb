@@ -16,6 +16,8 @@ class Parse
     parse_data @data
   end
 
+private
+
   def parse_data data
     total = data.count
     data.each.with_index do |rows, index|
@@ -36,10 +38,11 @@ class Parse
   end
 
   def split_at_colon data
+    data = data.scan(/[0-9a-zA-Z:+]/).join('')
+    p data
     data.include?(':') ? data.split(':')[1] : data
   end
 
-  private
 
   def file_to_array (data_file_path)
     begin
