@@ -1,6 +1,6 @@
 require 'data_mapper'
 require 'dm-postgres-adapter'
-require './dataParser/model/vote.rb'
+require './model/vote.rb'
 
 ENV['RACK_ENV'] ||= 'development'
 
@@ -86,8 +86,3 @@ class Parse
   end
 
 end
-if !ARGV.empty?
-path = ARGV[0].strip
-end
-parse = Parse.new(path='./dataParser/test.txt')
-parse.prepare
