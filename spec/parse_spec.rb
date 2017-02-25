@@ -3,12 +3,12 @@ require './dataParser/model/vote.rb'
 require "spec_helper"
 describe Parse do
   before(:each) do
-    @data_file_path = './dataParser/votes.txt'
+    @data_file_path = './dataParser/test.txt'
     @parse = Parse.new(@data_file_path)
   end
 
   it 'accepts one argument' do
-    expect(Parse).to receive(:new).with('./dataParser/votes.txt')
+    expect(Parse).to receive(:new).with('./dataParser/test.txt')
     @parse = Parse.new(@data_file_path)
   end
 
@@ -25,7 +25,7 @@ describe Parse do
   end
 
   it 'handles the encoding error by encoding it to UTF-8' do
-    nonUTF_data_file_path = './dataParser/votes.txt'
+    nonUTF_data_file_path = './dataParser/test.txt'
     parse = Parse.new(nonUTF_data_file_path)
     expect { parse.prepare }.not_to raise_error
   end
@@ -36,7 +36,7 @@ describe Parse do
   end
 
   it 'can validate the data rows during loading' do
-    faulty_file_path = './dataParser/votes.txt'
+    faulty_file_path = './dataParser/test.txt'
     parse = Parse.new(faulty_file_path)
     parse.prepare
     expect(parse.non_well_formatted.empty?).to be false
@@ -48,11 +48,8 @@ describe Parse do
   end
 
   it 'can store data in database' do
-    parse = Parse.new()
-    parse.prepare
-    row = @parse.data[0]
-    @parse.parse_data([row])
-    expect(Vote.count).to eq 1
+    @parse.prepare
+    expect(Vote.count).to eq @parse.data.count
   end
 
 end

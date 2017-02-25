@@ -1,4 +1,5 @@
 require './parse.rb'
+require './data_mapper_setup.rb'
 
 if !ARGV.empty?
 path = ARGV[0].strip

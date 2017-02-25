@@ -9,11 +9,6 @@ require './dataParser/parse.rb'
 
 if ENV['RACK_ENV'] != 'production'
 
-  # require 'rspec/core/rake_task'
-
-  # RSpec::Core::RakeTask.new :spec
-  #
-  # task default: [:spec]
 
   task :auto_upgrade do
     DataMapper.auto_upgrade!

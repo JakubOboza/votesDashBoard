@@ -1,21 +1,12 @@
-require 'data_mapper'
-require 'dm-postgres-adapter'
-require './model/vote.rb'
-
 ENV['RACK_ENV'] ||= 'development'
-
-
-DataMapper.setup(:default, ENV['DATABASE_URL'] || "postgres://postgres@localhost/votesDashBoard_#{ENV['RACK_ENV']}")
-DataMapper.finalize
-DataMapper.auto_upgrade!
-
+require './dataParser/data_mapper_setup.rb'
+require './dataParser/model/vote.rb'
 
 class Parse
   attr_reader :data, :data_file_path, :non_well_formatted
 # use ARGV later to load the file instead of constructor!!
   def initialize data_file_path
     @data_file_path = data_file_path
-    print @data_file_path
     @data = []
     @non_well_formatted = []
   end
