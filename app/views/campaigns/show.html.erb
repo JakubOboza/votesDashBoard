@@ -1,9 +1,9 @@
 <p>Total number of votes in this campaign:
-<%= @campaign_votes.count %>
+  <%= @campaign_votes.count %>
 </p>
 
 <% @choice_info.each do |choice| %>
-<%= choice[:name] %>
-<%= choice[:votes] %>
-<%= (choice[:votes]*100)/@campaign_votes.count %>%<br>
+  <%= choice[:name] %>
+  <%= choice[:votes] %>
+  <%= choice[:percentage] %>%<br>
 <% end %>
