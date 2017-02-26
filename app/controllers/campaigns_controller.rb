@@ -11,7 +11,7 @@ class CampaignsController < ApplicationController
   def show
     @campaign_votes = Vote.where(campaign: params[:id])
     @campaign_votes_valid = Vote.where(campaign: params[:id], validity: 'during')
-    # @campaign_votes_invalid = Vote.where(campaign: params[:id], "validity: = pre OR post ")
+    @campaign_votes_invalid = Vote.where(campaign: params[:id], validity: ['pre', 'post'])
     @choice_info = derive_data_to_show_from @campaign_votes_valid
   end
 
