@@ -2,13 +2,17 @@ class CampaignsController < ApplicationController
 
   def index
     votes = Vote.all
+    c = Vote.select(:campaign).distinct
+    c.each { |a| puts a.campaign }
     @campaigns = []
     votes.map { |vote| @campaigns << vote.campaign if !@campaigns.include?(vote.campaign)}
   end
 
   def show
-    @campaign_votes = Vote.where(campaign: params[:id], validity: 'during')
-    @choice_info = derive_data_to_show_from @campaign_votes
+    @campaign_votes = Vote.where(campaign: params[:id])
+    @campaign_votes_valid = Vote.where(campaign: params[:id], validity: 'during')
+    # @campaign_votes_invalid = Vote.where(campaign: params[:id], "validity: = pre OR post ")
+    @choice_info = derive_data_to_show_from @campaign_votes_valid
   end
 
 

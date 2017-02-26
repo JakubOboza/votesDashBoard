@@ -1,8 +1,27 @@
-<h1>HelloWorld</h1>
-<p>Total number of campaigns:
-  <%= @campaigns.count %> </p>
-<% @campaigns.each do |campaign| %>
-<%= campaign %>
-<%= link_to 'View', campaign_path(campaign)  %>
+<h2>Campaigns</h2>
 
-<% end %>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Currently Running Campaigns
+      <span class="badge"><%= @campaigns.count %></span>
+    </h3>
+  </div>
+  <div class="panel-body">
+    <div class=".container">
+      <div class="row">
+    <% @campaigns.each do |campaign| %>
+        <div class="col-md-2">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title"><%= campaign %></h3>
+            </div>
+            <div class="panel-body">
+              <%= link_to 'View', campaign_path(campaign)  %>
+            </div>
+          </div> <!-- end of campaign panel  -->
+        </div>
+    <% end %>
+  </div>
+  </div>
+  </div> <!-- end of outer panel  -->
+</div>
