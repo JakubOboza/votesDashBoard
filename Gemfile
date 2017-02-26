@@ -5,6 +5,8 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
+ruby '2.3.0'
+
 gem 'dm-postgres-adapter'
 gem 'dm-transactions'
 gem 'data_mapper'
