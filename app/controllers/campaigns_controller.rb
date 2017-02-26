@@ -9,7 +9,8 @@ class CampaignsController < ApplicationController
   end
 
   def show
-    @campaign_votes = Vote.where(campaign: params[:id])
+    @campaign_id = params[:id]
+    @campaign_votes_all = Vote.where(campaign: params[:id])
     @campaign_votes_valid = Vote.where(campaign: params[:id], validity: 'during')
     @campaign_votes_invalid = Vote.where(campaign: params[:id], validity: ['pre', 'post'])
     @choice_info = derive_data_to_show_from @campaign_votes_valid
@@ -36,7 +37,7 @@ class CampaignsController < ApplicationController
       percentage = (votes_per_choice.count * 100) / campaign_votes.count
       choice_info << {name: name, votes: votes_per_choice.count, percentage: percentage }
     end
-    choice_info
+    choice_info.sort!{ |a,b| b[:votes] <=> a[:votes] }
   end
 
 end

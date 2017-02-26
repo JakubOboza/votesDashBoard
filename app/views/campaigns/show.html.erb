@@ -1,9 +1,57 @@
-<p>Total number of votes in this campaign:
-  <%= @campaign_votes.count %>
-</p>
+<h2>Campaign <strong> <%= @campaign_id %></strong></h2>
 
-<% @choice_info.each do |choice| %>
-  <%= choice[:name] %>
-  <%= choice[:votes] %>
-  <%= choice[:percentage] %>%<br>
-<% end %>
+
+<div class="panel panel-default">
+  <div class="panel-heading"> <strong>Overview</strong></div>
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-md-4">
+        <table class="table table-striped">
+          <tr>
+            <td>Total votes:</td>
+            <td><%= @campaign_votes_all.count %></td>
+          </tr>
+          <tr>
+            <td>Valid votes</td>
+            <td><%= @campaign_votes_valid.count %></td>
+          </tr>
+          <tr>
+            <td>Invalid votes</td>
+            <td><%= @campaign_votes_invalid.count %></td>
+          </tr>
+        </table>
+      </div>
+
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading"><strong>Details</strong></div>
+    <div class="panel-body">
+
+        <div class="row">
+          <div class="col-md-4">
+            <table class="table table-striped">
+              <tr>
+                <th class="col-md-1 text-center">#</th>
+                <th class="col-md-3">Name</th>
+                <th class="col-md-4">Number of votes</th>
+                <th class="col-md-4 text-center">%</th>
+              </tr>
+              <% @choice_info.each.with_index do |choice, index| %>
+              <tr>
+                <td class="col-md-1 text-center"><%= index + 1 %></td>
+                <td class="col-md-3 text-left"><%= choice[:name] %></td>
+                <td class="col-md-4"><%= choice[:votes] %></td>
+                <td class="col-md-4 text-center"><%= choice[:percentage] %> % </td>
+              </tr>
+              <% end %>
+
+            </table>
+
+          </div>
+
+        </div>
+
+    </div>
+  </div>
+</div>

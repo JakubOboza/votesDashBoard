@@ -7,21 +7,19 @@
     </h3>
   </div>
   <div class="panel-body">
-    <div class="container vertical-center">
-      <div class="row">
-    <% @campaigns.each do |campaign| %>
-        <div class="col-md-2">
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <h3 class="panel-title"><%= campaign %></h3>
-            </div>
-            <div class="panel-body">
-              <%= link_to 'View', campaign_path(campaign)  %>
-            </div>
-          </div> <!-- end of campaign panel  -->
-        </div>
-    <% end %>
-  </div>
-  </div>
+    <div class="row">
+      <% @campaigns.each do |campaign| %>
+      <div class="col-md-1">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title"><%= campaign %></h3>
+          </div>
+          <div class="panel-body">
+            <%= link_to 'View', campaign_path(campaign)  %>
+          </div>
+        </div> <!-- end of campaign panel  -->
+      </div>
+      <% end %>
+    </div>
   </div> <!-- end of outer panel  -->
 </div>
