@@ -3,7 +3,7 @@ class Vote
   include DataMapper::Resource
 
   property :id, Serial
-  property :type, String
+  property :vote, String
   property :epoch, String
   property :campaign, String
   property :validity, String

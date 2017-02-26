@@ -1,7 +1,8 @@
 <h1>HelloWorld</h1>
+<p>Total number of campaigns:
+  <%= @campaigns.count %> </p>
+<% @campaigns.each do |campaign| %>
+<%= campaign %>
+<%= link_to 'View', campaign_path(campaign)  %>
 
-<% @votes.each do |vote| %>
-  <p>campaign name:</p>
-  <%= vote.campaign %>
-
-  <% end %>
+<% end %>

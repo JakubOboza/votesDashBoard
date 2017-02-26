@@ -16,7 +16,7 @@ ActiveRecord::Schema.define(version: 1) do
   enable_extension "plpgsql"
 
   create_table "votes", force: :cascade do |t|
-    t.string "type",      limit: 50
+    t.string "vote",      limit: 50
     t.string "epoch",     limit: 50
     t.string "campaign",  limit: 50
     t.string "validity",  limit: 50

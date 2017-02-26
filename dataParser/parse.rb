@@ -21,7 +21,7 @@ private
   def parse_data data
     total = data.count
     data.each.with_index do |rows, index|
-      vote = Vote.create(type: split_at_colon(rows[0]),
+      vote = Vote.create(vote: split_at_colon(rows[0]),
         epoch: split_at_colon(rows[1]),
         campaign: split_at_colon(rows[2]),
         validity: split_at_colon(rows[3]),
