@@ -12,14 +12,16 @@ class Parse
   end
 
   def prepare
-    file_to_array @data_file_path
-    parse_data @data
+    parse_file_to_array @data_file_path
+    store_in_db @data
+    p @data
+    # p @non_well_formatted
+    print_message_for('summary')
   end
 
   private
 
-  def parse_data data
-    total = data.count
+  def store_in_db data
     data.each.with_index do |rows, index|
       vote = Vote.create(vote: split_at_colon(rows[0]),
       epoch: split_at_colon(rows[1]),
@@ -30,11 +32,7 @@ class Parse
       msisdn: split_at_colon(rows[6]),
       guid: split_at_colon(rows[7]),
       shortcode: split_at_colon(rows[8]))
-      if (index % (total/20.0)) == 0
-        print '.'
-      end
     end
-    print " #{total} records parsed and #{@non_well_formatted.count} discarded"
   end
 
   def split_at_colon data
@@ -42,40 +40,50 @@ class Parse
     data.include?(':') ? data.split(':')[1] : data
   end
 
+  def print_message_for purpose
+    messages = {summary: "#{@data.count} records parsed and #{@non_well_formatted.count} discarded",
+                loadSuccess: "Data successfully loaded to parser"}
+    msg = messages[:"#{purpose}"]
+    puts "#{msg}"
+  end
 
-  def file_to_array (data_file_path)
+  def parse_file_to_array (data_file_path)
 
     begin
       File.open(data_file_path, 'r') do |f|
         f.each_line do |line|
-          line.encode!('UTF-8', :invalid => :replace, :undef => :replace, :replace => '').strip!
-          if line_valid? line
-            @data << line.split(' ')
-            print @data
-          else
-            @non_well_formatted << line
-            # p @non_well_formatted
-          end
+          replace_non_utf8_chars(line)
+          line_valid?(line) ?  @data << line.split(' ') : @non_well_formatted << line
         end
       end
-      puts 'Data successfully loaded loaded to parser'
-    rescue => err
+      print_message_for('loadSuccess')
+      rescue => err
       puts "Exception: #{err}"
       raise LoadError
       err
     end
   end
 
+  def replace_non_utf8_chars line
+    line.encode!('UTF-8', :invalid => :replace, :undef => :replace, :replace => '').strip!
+  end
+
   def line_valid? line
-    if line == ""
-      return
-    end
-    headers = ['VOTE', String, 'Campaign', 'Validity', 'Choice', 'CONN', 'MSISDN', 'GUID', 'Shortcode']
-    data_row = line.split(' ')
     valid = true;
-    if data_row.count != 9
-      valid = false
-    end
+    return false if empty_line? line
+    data_row = line.split(' ')
+    return false if row_length_incorrect?(data_row) || !headers_valid?(data_row)
+    valid
+  end
+  def empty_line? line
+    line == ""
+  end
+  def row_length_incorrect? data_row
+    data_row.count != 9
+  end
+  def headers_valid? data_row
+    headers = ['VOTE', String, 'Campaign', 'Validity', 'Choice', 'CONN', 'MSISDN', 'GUID', 'Shortcode']
+    valid = true
     data_row.each.with_index do |item, index|
       if index == 1
         item.scan(/\d+/).join == item ? true : valid = false
