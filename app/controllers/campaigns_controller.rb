@@ -2,10 +2,9 @@ class CampaignsController < ApplicationController
 
   def index
     votes = Vote.all
-    c = Vote.select(:campaign).distinct
-    c.each { |a| puts a.campaign }
+    campaign_uniqe = Vote.select(:campaign).distinct
     @campaigns = []
-    votes.map { |vote| @campaigns << vote.campaign if !@campaigns.include?(vote.campaign)}
+    campaign_uniqe.each { |a| @campaigns << a.campaign }
   end
 
   def show
