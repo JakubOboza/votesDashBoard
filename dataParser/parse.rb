@@ -3,45 +3,49 @@ require './dataParser/data_mapper_setup.rb'
 require './dataParser/model/vote.rb'
 
 class Parse
-  attr_reader :data, :data_file_path, :non_well_formatted
-  # use ARGV later to load the file instead of constructor!!
+  attr_reader :data_to_db, :data_raw, :data_file_path, :non_well_formatted
   def initialize data_file_path
     @data_file_path = data_file_path
-    @data = []
+    @data_raw = []
+    @data_to_db = []
     @non_well_formatted = []
   end
 
   def prepare
     parse_file_to_array @data_file_path
-    store_in_db @data
-    p @data
-    # p @non_well_formatted
+    store_in_db @data_to_db
     print_message_for('summary')
   end
 
   private
 
   def store_in_db data
-    data.each.with_index do |rows, index|
-      vote = Vote.create(vote: split_at_colon(rows[0]),
-      epoch: split_at_colon(rows[1]),
-      campaign: split_at_colon(rows[2]),
-      validity: split_at_colon(rows[3]),
-      choice: split_at_colon(rows[4]),
-      conn: split_at_colon(rows[5]),
-      msisdn: split_at_colon(rows[6]),
-      guid: split_at_colon(rows[7]),
-      shortcode: split_at_colon(rows[8]))
+    data.each.with_index do |row, index|
+      vote = Vote.create(vote: (row[0]),
+      epoch: (row[1]),
+      campaign: (row[2]),
+      validity: (row[3]),
+      choice: (row[4]),
+      conn: (row[5]),
+      msisdn: (row[6]),
+      guid: (row[7]),
+      shortcode: (row[8]))
     end
   end
 
   def split_at_colon data
-    data = data.scan(/[0-9a-zA-Z:+]/).join('')
-    data.include?(':') ? data.split(':')[1] : data
+    data.each.with_index do |row|
+      row = row.map.with_index do |item, index|
+        item = item.scan(/[0-9a-zA-Z:+]/).join('')
+        item.include?(':') ? item.split(':')[1] : item
+      end
+      @data_to_db << row
+    end
   end
 
+
   def print_message_for purpose
-    messages = {summary: "#{@data.count} records parsed and #{@non_well_formatted.count} discarded",
+    messages = {summary: "#{@data_to_db.count} records parsed and #{@non_well_formatted.count} discarded",
                 loadSuccess: "Data successfully loaded to parser"}
     msg = messages[:"#{purpose}"]
     puts "#{msg}"
@@ -53,9 +57,10 @@ class Parse
       File.open(data_file_path, 'r') do |f|
         f.each_line do |line|
           replace_non_utf8_chars(line)
-          line_valid?(line) ?  @data << line.split(' ') : @non_well_formatted << line
+          line_valid?(line) ?  @data_raw << line.split(' ') : @non_well_formatted << line
         end
       end
+      split_at_colon(@data_raw)
       print_message_for('loadSuccess')
       rescue => err
       puts "Exception: #{err}"

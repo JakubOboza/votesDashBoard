@@ -19,7 +19,7 @@ describe Parse do
     end
 
     it 'has an empty data array by default' do
-      expect(@parse.data).to eq []
+      expect(@parse.data_raw).to eq []
     end
   end
 
@@ -35,7 +35,6 @@ describe Parse do
     end
 
     it 'handles the encoding error by encoding it to UTF-8' do
-      print ()
       nonUTF_data_file_path = './dataParser/test.txt'
       parse = Parse.new(nonUTF_data_file_path)
       expect { parse.prepare }.not_to raise_error
@@ -51,12 +50,11 @@ describe Parse do
     end
 
     it 'can store the files lines in the data array' do
-      expect(@parse.data.count).not_to eq 0
+      expect(@parse.data_to_db.count).not_to eq 0
     end
 
     it 'can store data in database' do
-      p Vote.all
-      expect(Vote.count).to eq @parse.data.count
+      expect(Vote.count).to eq @parse.data_to_db.count
     end
   end
 
