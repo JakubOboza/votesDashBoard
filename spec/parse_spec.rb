@@ -24,6 +24,10 @@ describe Parse do
     expect { @parse.prepare }.not_to raise_error
   end
 
+  it 'strips a line from white space' do
+    @parse.prepare
+  end
+
   it 'handles the encoding error by encoding it to UTF-8' do
     nonUTF_data_file_path = './dataParser/test.txt'
     parse = Parse.new(nonUTF_data_file_path)

@@ -6,5 +6,6 @@ path = ARGV[0].strip
 parse = Parse.new(path)
 parse.prepare
 else
-  puts 'usage: ruby parsevotes <filepath> '
+  info_msg = "This application is a data parser for the Votes Dashboard application. \nIt populates the connected database with the data provided as a space separated value log file. \n\n usage: ruby parsevotes.rb <filepath>\n\n"
+  puts info_msg
 end
