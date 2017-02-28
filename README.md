@@ -47,7 +47,8 @@
 Ruby version: 2.3.0
 Postgres account.
 clone repo
-cd votesDashBoard
+cd votesDashBoard/votesDashBoard
+cd votesDashBoard/dataParser
 bundle install
   create database votesDashBoard_development, votesDashBoard_test
   rake auto_migrate (for DataMapper)
@@ -77,4 +78,4 @@ So I can see the result of a SMS campaign
 I want to be able to see the results on a web page in a nicely formatted way.
 
 ```
-![views](./public/votesDashBoard.png)
+![views](./votesDashBoard/public/votesDashBoard.png)
