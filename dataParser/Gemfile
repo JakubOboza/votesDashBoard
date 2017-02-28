@@ -1,0 +1,12 @@
+source "https://rubygems.org"
+
+ruby '2.3.0'
+
+gem 'dm-postgres-adapter'
+gem 'dm-transactions'
+gem 'data_mapper'
+gem 'rspec'
+
+group :test do
+  gem 'database_cleaner'
+end
