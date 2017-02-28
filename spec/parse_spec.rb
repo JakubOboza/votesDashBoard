@@ -25,24 +25,24 @@ describe Parse do
 
   context ' when file passed in ' do
     it 'can open a file' do
-      expect { @parse.prepare }.not_to raise_error
+      expect { @parse.start }.not_to raise_error
     end
   end
 
   context 'prepare' do
     before(:each) do
-      @parse.prepare
+      @parse.start
     end
 
     it 'handles the encoding error by encoding it to UTF-8' do
       nonUTF_data_file_path = './dataParser/test.txt'
       parse = Parse.new(nonUTF_data_file_path)
-      expect { parse.prepare }.not_to raise_error
+      expect { parse.start }.not_to raise_error
     end
     it "throws a 'LoadError' exeption if something can load the file" do
       wrong_data_file_path = './dataParser/tst.txt'
       parse = Parse.new(wrong_data_file_path)
-      expect { parse.prepare }.to raise_error LoadError
+      expect { parse.start }.to raise_error LoadError
     end
 
     it 'can validate the data rows during loading' do

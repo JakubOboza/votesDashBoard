@@ -11,7 +11,7 @@ class Parse
     @non_well_formatted = []
   end
 
-  def prepare
+  def start
     parse_file_to_array @data_file_path
     store_in_db @data_to_db
     print_message_for('summary')
@@ -80,12 +80,15 @@ class Parse
     return false if row_length_incorrect?(data_row) || !headers_valid?(data_row)
     valid
   end
+
   def empty_line? line
     line == ""
   end
+
   def row_length_incorrect? data_row
     data_row.count != 9
   end
+
   def headers_valid? data_row
     headers = ['VOTE', String, 'Campaign', 'Validity', 'Choice', 'CONN', 'MSISDN', 'GUID', 'Shortcode']
     valid = true
