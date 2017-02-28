@@ -57,8 +57,8 @@ rspec
 ```
 #### Command line tool usage
 ```
-ruby ./dataParser/parsevotes.rb <path_to_space_sepatated_txt_file_to_parse>
-e.g.: ruby ./dataParser/parsevotes.rb ./dataParser/votes.txt
+ruby parsevotes.rb <path_to_space_sepatated_txt_file_to_parse>
+e.g.: ruby parsevotes.rb votes.txt
 ```
 
 **Try it online:** `https://votes-dashboard.herokuapp.com/`
