@@ -12,7 +12,10 @@ gem 'dm-transactions'
 gem 'data_mapper'
 group :test do
   gem 'database_cleaner'
+  gem 'rspec-rails'
+  gem 'capybara'
 end
+
 gem 'rspec'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.0.1'
