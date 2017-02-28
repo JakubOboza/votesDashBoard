@@ -77,4 +77,4 @@ So I can see the result of a SMS campaign
 I want to be able to see the results on a web page in a nicely formatted way.
 
 ```
-![views]('./public/votesDashBoard.png')
+![views](./public/votesDashBoard.png)
