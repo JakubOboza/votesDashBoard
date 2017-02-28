@@ -23,13 +23,13 @@ describe Parse do
     end
   end
 
-  context ' when file passed in ' do
+  context '#parse_file_to_array ' do
     it 'can open a file' do
       expect { @parse.start }.not_to raise_error
     end
   end
 
-  context 'prepare' do
+  context '#parse_file_to_array' do
     before(:each) do
       @parse.start
     end
@@ -39,21 +39,53 @@ describe Parse do
       parse = Parse.new(nonUTF_data_file_path)
       expect { parse.start }.not_to raise_error
     end
-    it "throws a 'LoadError' exeption if something can load the file" do
+    it "throws a 'LoadError' exeption if can't load the file" do
       wrong_data_file_path = './dataParser/tst.txt'
       parse = Parse.new(wrong_data_file_path)
       expect { parse.start }.to raise_error LoadError
     end
 
-    it 'can validate the data rows during loading' do
+    it 'can discard non well-formatted data rows during loading' do
       expect(@parse.non_well_formatted.empty?).to be false
+    end
+
+    it "headers_valid? checks the rows for valid headers except for epoch column" do
+      headers = @parse.data_raw.first.map.with_index do |item, index|
+        next if index == 1
+        item.split(':')[0]
+      end
+      expect(headers).to contain_exactly('VOTE', nil, 'Campaign', 'Validity', 'Choice', 'CONN', 'MSISDN', 'GUID', 'Shortcode')
+    end
+
+    it "#headers_valid checks that the epoch column items contains only numbers " do
+      valid_epoch_times = @parse.data_raw.map { |row| row[1]  }
+      expect(valid_epoch_times).not_to include('1168aaa041837')
+      expect(@parse.non_well_formatted.flatten(1)).to include ('1168aaa041837')
     end
 
     it 'can store the files lines in the data array' do
       expect(@parse.data_to_db.count).not_to eq 0
     end
 
-    it 'can store data in database' do
+    it "every lines first value is 'VOTE'" do
+       first_elements = @parse.data_to_db.map { |row| row.first }
+      expect(first_elements).to all(be_a(String).and include('VOTE'))
+    end
+
+    it "#split_at_colon keeps only the value in the columns (removes key and colon)" do
+      flattened_array = @parse.data_to_db.flatten(1)
+      expect(flattened_array).not_to include(':', 'Campaign', 'Validity', 'Choice', 'CONN', 'MSISDN', 'GUID', 'Shortcode')
+    end
+
+    it "discards empty lines" do
+      @parse.data_to_db.flatten(1)
+      expect(@parse.data_to_db.flatten).not_to include(""," ")
+    end
+    it "all rows have to be 9 columns long" do
+      col_lengths = @parse.data_to_db.map { |row| row.count  }
+      expect(col_lengths).to all(be < 10).and all(be > 8)
+    end
+    it '#store_in_db can store data in database' do
       expect(Vote.count).to eq @parse.data_to_db.count
     end
   end

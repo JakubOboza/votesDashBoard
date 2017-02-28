@@ -45,7 +45,7 @@ class Parse
 
 
   def print_message_for purpose
-    messages = {summary: "#{@data_to_db.count} records parsed and #{@non_well_formatted.count} discarded",
+    messages = {summary: "#{@data_to_db.count} lines parsed and #{@non_well_formatted.count} lines discarded",
                 loadSuccess: "Data successfully loaded to parser"}
     msg = messages[:"#{purpose}"]
     puts "#{msg}"
@@ -57,7 +57,7 @@ class Parse
       File.open(data_file_path, 'r') do |f|
         f.each_line do |line|
           replace_non_utf8_chars(line)
-          line_valid?(line) ?  @data_raw << line.split(' ') : @non_well_formatted << line
+          line_valid?(line) ?  @data_raw << line.split(' ') : @non_well_formatted << line.split(' ')
         end
       end
       split_at_colon(@data_raw)
